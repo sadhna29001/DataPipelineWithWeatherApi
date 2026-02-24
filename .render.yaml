@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: weather-pipeline-web
+    env: python
+    plan: free
+    pythonVersion: "3.11"   # specify a version with prebuilt pandas wheels
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 pipeline.py
+
+# If you want hourly data collection via Render cron jobs, uncomment below section
+# cron:
+#   - name: hourly-pipeline
+#     schedule: "0 * * * *"  # every hour
+#     command: python3 pipeline.py
