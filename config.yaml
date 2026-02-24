@@ -1,0 +1,21 @@
+pipeline:
+  name: "Weather Data Pipeline"
+  version: "2.0.0"
+  description: "ETL pipeline for weather data collection using RapidAPI"
+
+data_source:
+  type: "rapidapi"
+  retry_attempts: 3
+  timeout: 30
+  batch_size: 10
+
+storage:
+  type: "csv"  # Options: csv, postgresql, sqlite
+  csv_path: "./data/weather_data.csv"
+  sqlite_path: "./data/weather_data.db"
+
+logging:
+  log_dir: "./logs"
+  log_file: "pipeline.log"
+  rotation: "daily"
+  retention_days: 30
