@@ -224,6 +224,48 @@ Check logs: `tail -f logs/*.log`
 View data: `python3 view_data.py`  
 Test setup: `python3 examples/test_components.py`
 
+## Deploying on Render
+
+This project can run on [Render](https://render.com) using either a **web service** or the built‑in **cron / background worker** feature.
+
+1. **Push your repository to GitHub** (already done).
+2. Go to Render dashboard ➜ **New** ➜ **Web Service** (or **Background Worker/cron job**).
+3. Connect the `sadhna29001/DataPipelineWithWeatherApi` repo.
+4. Set the Environment to **Python 3** (ideally 3.11 or 3.13) and add a **build command**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   **Note:** Render’s default Python 3.14 may not yet have wheels for some
+   packages (like pandas), causing build failures. Pinning the version to
+   `3.11` in the Render dashboard or `render.yaml` avoids this issue.
+5. For a web service use this start command:
+   ```bash
+   python3 pipeline.py
+   ```
+   or for continual scheduling choose **Background Worker** and use `python3 scheduler.py`.
+6. (Optional) you can also enable a Render cron job by including the
+   provided `render.yaml` at the root of your repo. An example definition
+   is already in that file:
+   ```yaml
+   services:
+     - type: web
+       name: weather-pipeline-web
+       env: python
+       plan: free
+       buildCommand: pip install -r requirements.txt
+       startCommand: python3 pipeline.py
+   # cron:
+   #   - name: hourly-pipeline
+   #     schedule: "0 * * * *"
+   #     command: python3 pipeline.py
+   ```
+
+Render will automatically install dependencies and run your pipeline.  Use
+either the web service or cron/worker depending on whether you need a
+action on HTTP requests or simply periodic execution.  Logs are available
+in the Render dashboard under your service’s **Logs** tab.
+
 ---
 
 **Built with Python | Powered by RapidAPI WeatherAPI**
