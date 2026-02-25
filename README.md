@@ -56,6 +56,20 @@ CITIES=London,New York,Tokyo,Paris,Sydney
 
 ## How to Run
 
+### 🌐 Web Dashboard (Recommended)
+Start the interactive web dashboard:
+```bash
+python3 app.py
+```
+Then open http://localhost:5000 in your browser.
+
+**Dashboard Features:**
+- 📊 Real-time weather data visualization
+- 🚀 One-click pipeline execution
+- 📝 Live logs monitoring
+- 📈 Statistics and analytics
+- 💻 Built-in command terminal
+
 ### Collect Weather Data (One Time)
 ```bash
 python3 pipeline.py
@@ -70,6 +84,8 @@ python3 view_data.py
 ```bash
 python3 examples/analyze_data.py
 ```
+
+**💡 Tip:** All these commands are also available in the web dashboard's **Terminal tab** with one-click execution and built-in output display!
 
 
 Output example:
@@ -113,9 +129,11 @@ python3 examples/custom_pipeline.py
 
 | Command | Description |
 |---------|-------------|
+| `python3 app.py` | **Start web dashboard** ⭐ |
 | `python3 pipeline.py` | Run pipeline once |
 | `python3 view_data.py` | View collected data |
 | `python3 scheduler.py` | Auto-collect every hour |
+| `python3 examples/analyze_data.py` | Detailed analytics |
 | `cat data/weather_data.csv` | View raw CSV data |
 | `tail -f logs/*.log` | Check logs |
 

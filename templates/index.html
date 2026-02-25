@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data Pipeline Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-cloud-sun"></i>
+                    <h1>Weather Data Pipeline</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                    <button id="runPipelineBtn" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Run Pipeline
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Status Bar -->
+        <div class="status-bar" id="statusBar">
+            <div class="status-item">
+                <span class="status-label">Status:</span>
+                <span class="status-value" id="pipelineStatus">
+                    <span class="status-badge status-idle">Idle</span>
+                </span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Last Run:</span>
+                <span class="status-value" id="lastRun">Never</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Records:</span>
+                <span class="status-value" id="recordsCount">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Message:</span>
+                <span class="status-value" id="statusMessage">Ready</span>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #3498db;">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Records</div>
+                    <div class="stat-value" id="totalRecords">0</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e74c3c;">
+                    <i class="fas fa-thermometer-half"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Avg Temperature</div>
+                    <div class="stat-value" id="avgTemp">--°C</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #2ecc71;">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Avg Humidity</div>
+                    <div class="stat-value" id="avgHumidity">--%</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #9b59b6;">
+                    <i class="fas fa-city"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-label">Cities</div>
+                    <div class="stat-value" id="citiesCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="weather">
+                <i class="fas fa-cloud-sun"></i> Weather Data
+            </button>
+            <button class="tab-btn" data-tab="terminal">
+                <i class="fas fa-terminal"></i> Terminal
+            </button>
+            <button class="tab-btn" data-tab="logs">
+                <i class="fas fa-file-alt"></i> Logs
+            </button>
+            <button class="tab-btn" data-tab="stats">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content active" id="weatherTab">
+            <div class="section-header">
+                <h2><i class="fas fa-table"></i> Latest Weather Data</h2>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search cities...">
+                </div>
+            </div>
+            
+            <div id="weatherCards" class="weather-grid">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading data...
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="terminalTab">
+            <div class="section-header">
+                <h2><i class="fas fa-terminal"></i> Command Terminal</h2>
+            </div>
+            <div class="terminal-container">
+                <div class="terminal-commands">
+                    <h3>Quick Commands</h3>
+                    <button class="terminal-cmd-btn" data-cmd="python3 view_data.py">
+                        <i class="fas fa-eye"></i> View Data
+                    </button>
+                    <button class="terminal-cmd-btn" data-cmd="python3 examples/analyze_data.py">
+                        <i class="fas fa-chart-line"></i> Analyze Data
+                    </button>
+                    <button class="terminal-cmd-btn" data-cmd="python3 examples/test_components.py">
+                        <i class="fas fa-vial"></i> Test Components
+                    </button>
+                    <button class="terminal-cmd-btn" data-cmd="python3 pipeline.py">
+                        <i class="fas fa-play-circle"></i> Run Pipeline
+                    </button>
+                </div>
+                <div class="terminal-output">
+                    <div class="terminal-header">
+                        <span>Output</span>
+                        <button class="btn-clear" id="clearTerminal">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                    <pre id="terminalOutput">Click a command button to execute...</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="logsTab">
+            <div class="section-header">
+                <h2><i class="fas fa-file-alt"></i> Pipeline Logs</h2>
+                <button class="btn btn-secondary" id="refreshLogsBtn">
+                    <i class="fas fa-sync"></i> Refresh Logs
+                </button>
+            </div>
+            <div class="logs-container">
+                <pre id="logsContent">No logs available</pre>
+            </div>
+        </div>
+
+        <div class="tab-content" id="statsTab">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> Pipeline Statistics</h2>
+            </div>
+            <div class="stats-details" id="statsDetails">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading statistics...
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Weather Data Pipeline Dashboard v2.0 | Last Updated: <span id="lastUpdate">--</span></p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
