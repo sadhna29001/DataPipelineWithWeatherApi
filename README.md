@@ -57,6 +57,12 @@ CITIES=London,New York,Tokyo,Paris,Sydney
 ## How to Run
 
 ### 🌐 Web Dashboard (Recommended)
+
+![Dashboard Screenshot](docs/Screenshot from 2026-02-25 16-01-59.png)
+
+> **Note:** Make sure the image file is added to Git (`git add docs/Screenshot\ from\ 2026-02-25\ 16-01-59.png`) and pushed; otherwise the GitHub/Repo view can’t display it.
+*Replace with actual screenshot if available.*
+
 Start the interactive web dashboard:
 ```bash
 python3 app.py
